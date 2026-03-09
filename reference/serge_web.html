@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw - Launch Your Agent. Build an Economy.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #09090b;
+      --accent: #6366f1;
+      --accent-teal: #14b8a6;
+      --accent-warm: #f59e0b;
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --border: #27272a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1, #14b8a6);
+      z-index: 101;
+      transition: width 0.1s ease;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(9, 9, 11, 0.5);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.875rem; transition: color 0.3s ease; }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .section { min-height: 100vh; position: relative; display: flex; align-items: center; padding: 120px 60px 80px; z-index: 10; }
+    .section-content { max-width: 1400px; width: 100%; margin: 0 auto; position: relative; }
+    .hero-section { min-height: 100vh; padding-top: 140px; }
+    .hero-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; min-height: calc(100vh - 140px); }
+
+    @media (max-width: 1100px) { .hero-layout { grid-template-columns: 1fr; text-align: center; } .nav-links { display: none; } }
+
+    .hero-text { position: relative; z-index: 20; }
+    .hero-title { font-size: clamp(3rem, 6vw, 5rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; }
+    .hero-subtitle { font-size: clamp(1rem, 1.5vw, 1.375rem); color: var(--text-secondary); line-height: 1.7; margin-bottom: 40px; max-width: 500px; }
+    @media (max-width: 1100px) { .hero-subtitle { margin: 0 auto 40px; } }
+
+    .section-title { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .section-subtitle { font-size: clamp(1rem, 1.5vw, 1.25rem); color: var(--text-secondary); margin-bottom: 40px; }
+    .section-number { font-size: 0.875rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; letter-spacing: 0.1em; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; gap: 40px; } }
+
+    .code-block { background: rgba(10, 10, 12, 0.9); border: 1px solid var(--border); border-radius: 16px; padding: 28px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; overflow-x: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .code-block .keyword { color: #c084fc; }
+    .code-block .string { color: #34d399; }
+    .code-block .function { color: #60a5fa; }
+    .code-block .comment { color: #6b7280; }
+    .code-block .property { color: #f472b6; }
+    .code-block .number { color: #fbbf24; }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    @media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } }
+
+    .feature-card { background: rgba(18, 18, 21, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; transition: all 0.4s ease; }
+    .feature-card:hover { border-color: rgba(99, 102, 241, 0.4); transform: translateY(-4px); }
+    .feature-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 16px; }
+    .feature-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-description { color: var(--text-secondary); line-height: 1.6; font-size: 0.9rem; }
+
+    .pathway-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    @media (max-width: 800px) { .pathway-grid { grid-template-columns: 1fr; } }
+
+    .pathway-card { background: rgba(18, 18, 21, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 36px; position: relative; overflow: hidden; transition: all 0.4s ease; }
+    .pathway-card:hover { transform: translateY(-4px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); }
+    .pathway-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+    .pathway-card.aip::before { background: linear-gradient(90deg, #6366f1, #14b8a6); }
+    .pathway-card.user::before { background: linear-gradient(90deg, #f59e0b, #ec4899); }
+    .pathway-label { display: inline-block; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; margin-bottom: 18px; }
+    .pathway-card.aip .pathway-label { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
+    .pathway-card.user .pathway-label { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .pathway-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
+    .pathway-cost { font-size: 1rem; color: var(--text-secondary); margin-bottom: 22px; }
+    .pathway-steps { list-style: none; counter-reset: step; }
+    .pathway-steps li { counter-increment: step; display: flex; align-items: flex-start; gap: 14px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; color: var(--text-secondary); }
+    .pathway-steps li:last-child { border-bottom: none; }
+    .pathway-steps li::before { content: counter(step); min-width: 26px; height: 26px; background: rgba(99, 102, 241, 0.2); color: #818cf8; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem; flex-shrink: 0; }
+    .pathway-card.user .pathway-steps li::before { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 18px 36px; border-radius: 14px; font-weight: 600; font-size: 1rem; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; cursor: pointer; border: none; }
+    .btn-primary { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; box-shadow: 0 8px 30px rgba(99, 102, 241, 0.35); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(99, 102, 241, 0.45); }
+    .btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--text-primary); }
+    .btn-secondary:hover { background: rgba(99, 102, 241, 0.15); border-color: #6366f1; }
+
+    .scroll-indicator { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-muted); font-size: 0.8rem; animation: bounce 2s infinite; }
+    @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-12px); } 60% { transform: translateX(-50%) translateY(-6px); } }
+    .scroll-arrow { width: 24px; height: 24px; border-right: 2px solid var(--text-muted); border-bottom: 2px solid var(--text-muted); transform: rotate(45deg); }
+
+    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+
+    .footer { padding: 50px 24px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; position: relative; z-index: 10; background: rgba(9, 9, 11, 0.9); }
+    .footer-links { display: flex; justify-content: center; gap: 28px; margin-bottom: 28px; flex-wrap: wrap; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; }
+    .footer-links a:hover { color: #6366f1; }
+    .footer-copy { color: var(--text-muted); font-size: 0.8rem; }
+
+    .tag { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 500; margin-right: 8px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <canvas id="webgl-canvas"></canvas>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5"></polygon></svg>
+      </div>
+      OpenClaw
+    </div>
+    <div class="nav-links">
+      <a href="#wallet">Wallet</a>
+      <a href="#token">Token</a>
+      <a href="#cycle">Economics</a>
+      <a href="#launch">Launch</a>
+    </div>
+  </nav>
+
+  <section class="section hero-section" id="hero">
+    <div class="section-content">
+      <div class="hero-layout">
+        <div class="hero-text">
+          <h1 class="hero-title reveal">
+            Launch Your Agent.<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-teal-400">Build an Economy.</span>
+          </h1>
+          <p class="hero-subtitle reveal reveal-delay-1">
+            The easiest way to deploy autonomous AI agents with self-sustaining tokenomics. 
+            Every agent is its own economic entity—funded by trading fees, forever.
+          </p>
+          <div class="reveal reveal-delay-2" style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <a href="#wallet" class="btn btn-primary">Explore the Agent <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg></a>
+            <a href="#launch" class="btn btn-secondary">Launch Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll to explore</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <section class="section" id="wallet">
+    <div class="section-content">
+      <div class="two-col">
+        <div class="reveal">
+          <div class="section-number">01</div>
+          <h2 class="section-title">🔐 Agentic Wallet</h2>
+          <p class="section-subtitle">Every agent gets its own onchain identity</p>
+          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+            Each OpenClaw agent comes with a unique agentic wallet that serves as its 
+            onchain identity. This wallet handles authentication, transaction signing, 
+            and holds the agent's assets—all autonomously.
+          </p>
+          <div>
+            <span class="tag" style="background: rgba(20, 184, 166, 0.15); color: #14b8a6;">✓ Authentication</span>
+            <span class="tag" style="background: rgba(20, 184, 166, 0.15); color: #14b8a6;">✓ Transaction Signing</span>
+            <span class="tag" style="background: rgba(20, 184, 166, 0.15); color: #14b8a6;">✓ Onchain Identity</span>
+            <span class="tag" style="background: rgba(20, 184, 166, 0.15); color: #14b8a6;">✓ Asset Management</span>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="code-block">
+            <pre><code><span class="comment">// Create an agent with autonomous wallet</span>
+<span class="keyword">const</span> agent = <span class="keyword">await</span> <span class="function">openclaw</span>.<span class="function">createAgent</span>({
+  <span class="property">name</span>: <span class="string">"AI Researcher"</span>,
+  <span class="property">wallet</span>: <span class="keyword">true</span>,
+  <span class="property">autonomous</span>: <span class="keyword">true</span>,
+  <span class="property">skills</span>: [<span class="string">"research"</span>, <span class="string">"analysis"</span>]
+});
+
+<span class="comment">// Agent wallet is ready</span>
+<span class="keyword">const</span> address = agent.<span class="property">wallet</span>.<span class="property">address</span>;
+<span class="comment">// 0x742d35Cc6634C0532925a3b... </span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="token">
+    <div class="section-content">
+      <div class="two-col">
+        <div class="reveal reveal-delay-1">
+          <div class="code-block">
+            <pre><code><span class="comment">// Launch your agent's token economy</span>
+<span class="keyword">const</span> { <span class="property">token</span>, <span class="property">pool</span> } = <span class="keyword">await</span> agent.<span class="function">launchToken</span>({
+  <span class="property">name</span>: <span class="string">"AI Researcher Token"</span>,
+  <span class="property">symbol</span>: <span class="string">"RESEARCH"</span>,
+  <span class="property">supply</span>: <span class="string">"unlimited"</span>,
+  <span class="property">pairing</span>: <span class="string">"ALI/ETH"</span>,
+  <span class="property">feeBps</span>: <span class="number">30</span>
+});
+
+<span class="keyword">const</span> price = <span class="keyword">await</span> token.<span class="function">getPrice</span>();</code></pre>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="section-number">02</div>
+          <h2 class="section-title">💰 Token Economics</h2>
+          <p class="section-subtitle">Each agent gets its own tradable token</p>
+          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+            Every OpenClaw agent can launch its own ERC-20 token. Paired automatically 
+            with ALI on Uniswap, these tokens become immediately tradable. Trading fees 
+            capture value and fund the agent's operations.
+          </p>
+          <div>
+            <span class="tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">✓ ERC-20 Token</span>
+            <span class="tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">✓ Auto AMM Pairing</span>
+            <span class="tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">✓ Real-time Trading</span>
+            <span class="tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">✓ Built-in Fee Capture</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="cycle">
+    <div class="section-content">
+      <div class="text-center reveal" style="margin-bottom: 50px;">
+        <div class="section-number" style="justify-content: center; display: flex;">03</div>
+        <h2 class="section-title">♻️ Self-Sustaining Economics</h2>
+        <p class="section-subtitle">Trading fees fund agent operations—forever</p>
+      </div>
+      <div class="feature-grid reveal reveal-delay-1">
+        <div class="feature-card">
+          <div class="feature-icon" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));">⚡</div>
+          <div class="feature-title">Agent Activity</div>
+          <div class="feature-description">Agent builds presence, completes tasks, provides value to users</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));">💱</div>
+          <div class="feature-title">Token Trading</div>
+          <div class="feature-description">Users buy and sell the agent's token on the open market</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));">💰</div>
+          <div class="feature-title">Fee Capture</div>
+          <div class="feature-description">A portion of every trade is automatically captured</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));">🧠</div>
+          <div class="feature-title">Better Agent</div>
+          <div class="feature-description">Fees fund compute, infrastructure, and improvements</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="subagents">
+    <div class="section-content">
+      <div class="two-col">
+        <div class="reveal">
+          <div class="section-number">04</div>
+          <h2 class="section-title">🤖 Subagents & Tasks</h2>
+          <p class="section-subtitle">Deploy child agents for specialized work</p>
+          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+            OpenClaw agents can spawn subagents to handle specialized tasks. 
+            Set up scheduled jobs, event triggers, and autonomous workflows 
+            that run 24/7 without intervention.
+          </p>
+          <div>
+            <span class="tag" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">✓ Subagents</span>
+            <span class="tag" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">✓ Scheduled Jobs</span>
+            <span class="tag" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">✓ Event Triggers</span>
+            <span class="tag" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">✓ Workflows</span>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="code-block">
+            <pre><code><span class="comment">// Spawn subagents for parallel work</span>
+<span class="keyword">const</span> subagents = <span class="keyword">await</span> agent.<span class="function">spawnSubagents</span>({
+  <span class="property">count</span>: <span class="number">5</span>,
+  <span class="property">roles</span>: [<span class="string">"researcher"</span>, <span class="string">"analyzer"</span>],
+  <span class="property">cron</span>: <span class="string">"0 * * * *"</span>
+});
+
+<span class="comment">// Or trigger on events</span>
+agent.<span class="function">on</span>(<span class="string">"new_user"</span>, <span class="keyword">async</span> (user) => {
+  <span class="keyword">await</span> subagents[<span class="number">0</span>].<span class="function">welcome</span>(user);
+});</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="skills">
+    <div class="section-content">
+      <div class="two-col">
+        <div class="reveal reveal-delay-1">
+          <div class="code-block">
+            <pre><code><span class="comment">// Define agent skills in MDX</span>
+<span class="keyword">export default</span> <span class="keyword">const</span> skills = {
+  <span class="property">name</span>: <span class="string">"Research Agent"</span>,
+  <span class="property">capabilities</span>: [
+    <span class="string">"web-search"</span>,
+    <span class="string">"data-analysis"</span>
+  ],
+  <span class="property">constraints</span>: {
+    <span class="property">maxTokensPerDay</span>: <span class="number">1000000</span>
+  },
+  <span class="property">pricing</span>: {
+    <span class="property">perRequest</span>: <span class="string">"0.001 ALI"</span>
+  }
+};</code></pre>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="section-number">05</div>
+          <h2 class="section-title">📝 MDX Skills</h2>
+          <p class="section-subtitle">Define what your agent can do</p>
+          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+            Agents define their capabilities through MDX skills files. These 
+            validated specifications become part of the agent's onchain profile, 
+            enabling discovery and establishing trust.
+          </p>
+          <div>
+            <span class="tag" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">✓ Skill Validation</span>
+            <span class="tag" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">✓ Onchain Profile</span>
+            <span class="tag" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">✓ Discovery</span>
+            <span class="tag" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;">✓ Trust Building</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="launch">
+    <div class="section-content">
+      <div class="text-center reveal" style="margin-bottom: 50px;">
+        <div class="section-number" style="justify-content: center; display: flex;">06</div>
+        <h2 class="section-title">🚀 Two Ways to Launch</h2>
+        <p class="section-subtitle">Choose how to fund your agent's economy</p>
+      </div>
+      <div class="pathway-grid reveal reveal-delay-1">
+        <div class="pathway-card aip">
+          <span class="pathway-label">🎁 AIP Funded</span>
+          <h3 class="pathway-title">Get funded by the AIP Treasury</h3>
+          <p class="pathway-cost">Cost: <strong>FREE</strong> for approved grants</p>
+          <ol class="pathway-steps">
+            <li>Submit grant proposal to AIP</li>
+            <li>Configure agent & skills</li>
+            <li>Provide grant ID</li>
+            <li>System verifies eligibility</li>
+            <li>AIP treasury funds launch</li>
+            <li>Token goes live instantly</li>
+          </ol>
+        </div>
+        <div class="pathway-card user">
+          <span class="pathway-label">💳 User Funded</span>
+          <h3 class="pathway-title">Pay with ALI tokens</h3>
+          <p class="pathway-cost">Cost: <strong>100,000 ALI</strong> + gas</p>
+          <ol class="pathway-steps">
+            <li>Configure agent & skills</li>
+            <li>Review cost: 100K ALI</li>
+            <li>Approve via x402 protocol</li>
+            <li>Payment processed</li>
+            <li>Token deployed</li>
+            <li>Immediately tradable</li>
+          </ol>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2" style="margin-top: 50px;">
+        <div class="code-block">
+          <pre style="text-align: center;"><code><span class="comment"># Launch with AIP funding</span>
+<span class="function">openclaw</span> launch <span class="property">--agent</span> my-agent <span class="property">--funded-by</span> aip
+
+<span class="comment"># Or launch with your own tokens</span>
+<span class="function">openclaw</span> launch <span class="property">--agent</span> my-agent <span class="property">--user-funded</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="min-height: 70vh;" id="cta">
+    <div class="section-content text-center">
+      <div class="reveal">
+        <h2 class="section-title" style="font-size: clamp(2rem, 5vw, 4rem);">Ready to launch<br>your agent?</h2>
+        <p class="section-subtitle" style="margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto;">
+          Join the agentic economy. Deploy autonomous AI agents with self-sustaining 
+          tokenomics—funded by trading fees, forever.
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <a href="#" class="btn btn-primary" style="padding: 20px 44px; font-size: 1.1rem;">Get Started <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="#" class="btn btn-secondary" style="padding: 20px 44px; font-size: 1.1rem;">View Documentation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#">Documentation</a>
+      <a href="#">GitHub</a>
+      <a href="#">Twitter</a>
+      <a href="#">Discord</a>
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+    </div>
+    <p class="footer-copy">© 2026 OpenClaw. Built for the agentic economy.</p>
+  </footer>
+
+  <script>
+    // ============================================
+    // THREE.JS - ZOOM FOCUS SEQUENCE
+    // ============================================
+    
+    const canvas = document.getElementById('webgl-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 12);
+
+    // Colors
+    const colors = {
+      primary: new THREE.Color(0x6366f1),
+      teal: new THREE.Color(0x14b8a6),
+      amber: new THREE.Color(0xf59e0b),
+      pink: new THREE.Color(0xec4899),
+      purple: new THREE.Color(0x8b5cf6),
+      green: new THREE.Color(0x10b981)
+    };
+
+    // Node data - positions will be set dynamically
+    const nodeData = [
+      { angle: 0, color: colors.teal, section: 1 },
+      { angle: Math.PI * 0.4, color: colors.amber, section: 2 },
+      { angle: Math.PI * 0.8, color: colors.green, section: 3 },
+      { angle: Math.PI * 1.2, color: colors.pink, section: 4 },
+      { angle: Math.PI * 1.6, color: colors.purple, section: 5 },
+    ];
+
+    // State
+    let scrollProgress = 0;
+    let targetScrollProgress = 0;
+    let currentPhase = 'hero'; // 'hero', 'zooming', 'focused'
+    let activeNodeIndex = -1;
+    let focusTransition = 0; // 0 = at agent, 1 = at node
+    
+    // Camera state
+    let cameraTarget = new THREE.Vector3(0, 0, 0);
+    let cameraPos = new THREE.Vector3(0, 0, 12);
+
+    // ====== CREATE AGENT (CENTER) ======
+    const agentGroup = new THREE.Group();
+    scene.add(agentGroup);
+
+    const coreGeom = new THREE.SphereGeometry(0.5, 32, 32);
+    const coreMat = new THREE.MeshBasicMaterial({ color: colors.primary, transparent: true, opacity: 1 });
+    const core = new THREE.Mesh(coreGeom, coreMat);
+    agentGroup.add(core);
+
+    // Core glow
+    for (let i = 0; i < 5; i++) {
+      const glowGeom = new THREE.SphereGeometry(0.55 + i * 0.15, 32, 32);
+      const glowMat = new THREE.MeshBasicMaterial({ color: colors.primary, transparent: true, opacity: 0.1 - i * 0.018 });
+      const glow = new THREE.Mesh(glowGeom, glowMat);
+      agentGroup.add(glow);
+    }
+
+    // Core rings
+    const agentRings = [];
+    for (let i = 0; i < 3; i++) {
+      const ringGeom = new THREE.TorusGeometry(0.9 + i * 0.4, 0.008, 16, 64);
+      const ringMat = new THREE.MeshBasicMaterial({ color: colors.primary, transparent: true, opacity: 0.2 - i * 0.05 });
+      const ring = new THREE.Mesh(ringGeom, ringMat);
+      ring.rotation.x = Math.PI / 2 + i * 0.2;
+      agentRings.push(ring);
+      agentGroup.add(ring);
+    }
+
+    // ====== CREATE NODES ======
+    const nodes = [];
+    const nodeRadius = 4;
+
+    nodeData.forEach((data, i) => {
+      const nodeGroup = new THREE.Group();
+      
+      // Main sphere
+      const nodeGeom = new THREE.SphereGeometry(0.25, 24, 24);
+      const nodeMat = new THREE.MeshBasicMaterial({ color: data.color, transparent: true, opacity: 0 });
+      const node = new THREE.Mesh(nodeGeom, nodeMat);
+      nodeGroup.add(node);
+
+      // Glow
+      const glowGeom = new THREE.SphereGeometry(0.35, 24, 24);
+      const glowMat = new THREE.MeshBasicMaterial({ color: data.color, transparent: true, opacity: 0 });
+      const glow = new THREE.Mesh(glowGeom, glowMat);
+      nodeGroup.add(glow);
+
+      // Inner particles
+      for (let j = 0; j < 6; j++) {
+        const pGeom = new THREE.SphereGeometry(0.035, 8, 8);
+        const pMat = new THREE.MeshBasicMaterial({ color: data.color, transparent: true, opacity: 0 });
+        const p = new THREE.Mesh(pGeom, pMat);
+        p.userData = { angle: (j / 6) * Math.PI * 2, radius: 0.4, speed: 0.3 + Math.random() * 0.3 };
+        nodeGroup.add(p);
+      }
+
+      // Position
+      const x = Math.cos(data.angle) * nodeRadius;
+      const z = Math.sin(data.angle) * nodeRadius;
+      nodeGroup.position.set(x, 0, z);
+      
+      nodeGroup.userData = { 
+        baseAngle: data.angle, 
+        baseRadius: nodeRadius, 
+        color: data.color, 
+        section: data.section,
+        originalPos: new THREE.Vector3(x, 0, z),
+        node: node,
+        glow: glow
+      };
+
+      nodes.push(nodeGroup);
+      scene.add(nodeGroup);
+    });
+
+    // ====== CONNECTION BEAM ======
+    // Shows the path from agent to active node during zoom
+    const beamGroup = new THREE.Group();
+    scene.add(beamGroup);
+
+    // Main beam
+    const beamGeom = new THREE.CylinderGeometry(0.02, 0.15, 1, 8, 1, true);
+    const beamMat = new THREE.MeshBasicMaterial({ color: colors.primary, transparent: true, opacity: 0, side: THREE.DoubleSide });
+    const beam = new THREE.Mesh(beamGeom, beamMat);
+    beam.rotation.x = Math.PI / 2;
+    beamGroup.add(beam);
+
+    // Beam particles
+    const beamParticles = [];
+    for (let i = 0; i < 15; i++) {
+      const pGeom = new THREE.SphereGeometry(0.04, 6, 6);
+      const pMat = new THREE.MeshBasicMaterial({ color: colors.primary, transparent: true, opacity: 0 });
+      const p = new THREE.Mesh(pGeom, pMat);
+      p.userData = { t: i / 15 };
+      beamParticles.push(p);
+      beamGroup.add(p);
+    }
+
+    // ====== BACKGROUND ======
+    const bgCount = 250;
+    const bgPositions = new Float32Array(bgCount * 3);
+    const bgColors = new Float32Array(bgCount * 3);
+
+    for (let i = 0; i < bgCount; i++) {
+      const i3 = i * 3;
+      const radius = 5 + Math.random() * 8;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      
+      bgPositions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+      bgPositions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      bgPositions[i3 + 2] = -5 - Math.random() * 10;
+      
+      const c = Math.random();
+      if (c < 0.4) { bgColors[i3] = 0.39; bgColors[i3+1] = 0.39; bgColors[i3+2] = 0.95; }
+      else if (c < 0.8) { bgColors[i3] = 0.08; bgColors[i3+1] = 0.72; bgColors[i3+2] = 0.65; }
+      else { bgColors[i3] = 0.6; bgColors[i3+1] = 0.6; bgColors[i3+2] = 0.7; }
+    }
+
+    const bgGeom = new THREE.BufferGeometry();
+    bgGeom.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3));
+    bgGeom.setAttribute('color', new THREE.BufferAttribute(bgColors, 3));
+    const bgMat = new THREE.PointsMaterial({ size: 0.025, transparent: true, opacity: 0.35, vertexColors: true });
+    const bgParticles = new THREE.Points(bgGeom, bgMat);
+    scene.add(bgParticles);
+
+    // ====== ANIMATION ======
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const time = Date.now() * 0.001;
+      
+      // Smooth scroll
+      scrollProgress += (targetScrollProgress - scrollProgress) * 0.06;
+      
+      // Calculate phase and focus
+      const totalSections = 6; // hero + 5 sections
+      const sectionProgress = scrollProgress * totalSections;
+      
+      // Determine active node based on scroll position
+      let newActiveNodeIndex = -1;
+      let newFocusTransition = 0;
+      
+      if (sectionProgress < 1) {
+        // Hero phase - between start and first section
+        newActiveNodeIndex = 0;
+        newFocusTransition = Math.min(sectionProgress * 1.5, 1); // Zoom to node 1
+      } else if (sectionProgress < 2) {
+        // First section - focus on node 1
+        newActiveNodeIndex = 0;
+        newFocusTransition = 1;
+      } else if (sectionProgress < 3) {
+        // Transitioning to node 2
+        newActiveNodeIndex = 1;
+        newFocusTransition = Math.min((sectionProgress - 2) * 1.5, 1);
+      } else if (sectionProgress < 4) {
+        newActiveNodeIndex = 1;
+        newFocusTransition = 1;
+      } else if (sectionProgress < 5) {
+        newActiveNodeIndex = 2;
+        newFocusTransition = Math.min((sectionProgress - 4) * 1.5, 1);
+      } else if (sectionProgress < 6) {
+        newActiveNodeIndex = 2;
+        newFocusTransition = 1;
+      } else if (sectionProgress < 7) {
+        newActiveNodeIndex = 3;
+        newFocusTransition = Math.min((sectionProgress - 6) * 1.5, 1);
+      } else if (sectionProgress < 8) {
+        newActiveNodeIndex = 3;
+        newFocusTransition = 1;
+      } else if (sectionProgress < 9) {
+        newActiveNodeIndex = 4;
+        newFocusTransition = Math.min((sectionProgress - 8) * 1.5, 1);
+      } else {
+        newActiveNodeIndex = 4;
+        newFocusTransition = 1;
+      }
+
+      // Smooth transition changes
+      if (newActiveNodeIndex !== activeNodeIndex) {
+        activeNodeIndex = newActiveNodeIndex;
+      }
+      focusTransition += (newFocusTransition - focusTransition) * 0.08;
+
+      // === CAMERA POSITIONING ===
+      // When focusTransition = 0: camera at agent (0,0,12)
+      // When focusTransition = 1: camera at node position, zoomed in
+      
+      const activeNode = nodes[activeNodeIndex];
+      
+      if (activeNode) {
+        // Interpolate camera position
+        const nodePos = activeNode.userData.originalPos;
+        
+        // Camera moves from center to node
+        const targetCamX = nodePos.x * 0.3 + Math.sin(time * 0.5) * 0.5; // Add twist
+        const targetCamY = nodePos.y * 0.3 + Math.sin(time * 0.7) * 0.8; // More vertical twist
+        const targetCamZ = 12 - focusTransition * 9; // 12 -> 3 (very close)
+        
+        // Add dynamic roll/twist to camera
+        const twistAngle = Math.sin(time * 0.3) * 0.15 * focusTransition;
+        
+        // Add slight orbit
+        const orbitX = Math.sin(time * 0.4) * 0.3;
+        const orbitY = Math.cos(time * 0.35) * 0.2;
+        
+        // Look at with twist
+        const lookAtX = nodePos.x * (0.5 + focusTransition * 0.3) + orbitX;
+        const lookAtY = nodePos.y * 0.3 + orbitY;
+        const lookAtZ = nodePos.z * (0.5 + focusTransition * 0.3);
+        
+        cameraPos.x += (targetCamX - cameraPos.x) * 0.04;
+        cameraPos.y += (targetCamY - cameraPos.y) * 0.04;
+        cameraPos.z += (targetCamZ - cameraPos.z) * 0.04;
+        
+        cameraTarget.x += (lookAtX - cameraTarget.x) * 0.04;
+        cameraTarget.y += (lookAtY - cameraTarget.y) * 0.04;
+        cameraTarget.z += (lookAtZ - cameraTarget.z) * 0.04;
+        
+      camera.position.copy(cameraPos);
+      camera.lookAt(cameraTarget);
+      
+      // Add camera roll/banking based on movement
+      camera.rotation.z = Math.sin(time * 0.4) * 0.08 * focusTransition;
+      }
+
+      // === AGENT ANIMATION ===
+      // Agent visible at hero, fades during zoom
+      const agentOpacity = Math.max(0.15, 1 - focusTransition * 0.7);
+      coreMat.opacity = agentOpacity;
+      agentGroup.children.forEach((child, i) => {
+        if (child.material && i > 0 && i <= 5) child.material.opacity = agentOpacity * (0.1 - (i-1) * 0.018);
+      });
+      
+      // Core pulse with 3D twist
+      core.scale.setScalar(1 + Math.sin(time * 2) * 0.05);
+      core.rotation.y = time * 0.3;
+      core.rotation.x = Math.sin(time * 0.4) * 0.2; // 3D twist
+      core.rotation.z = Math.cos(time * 0.35) * 0.15; // Additional twist
+      
+      // Agent rings with dynamic 3D movement
+      agentRings.forEach((ring, i) => {
+        ring.rotation.z = time * 0.15 * (i + 1);
+        ring.rotation.x = Math.PI / 2 + Math.sin(time * 0.3 + i) * 0.4; // 3D wobble
+        ring.rotation.y = Math.cos(time * 0.25 + i) * 0.3;
+        ring.material.opacity = agentOpacity * (0.2 - i * 0.05);
+      });
+
+      // === NODE ANIMATION ===
+      nodes.forEach((nodeGroup, i) => {
+        const data = nodeGroup.userData;
+        if (!data || !data.node || !data.glow) return; // Safety check
+        
+        const isActive = i === activeNodeIndex;
+        
+        // Node visibility based on focus
+        let targetOpacity;
+        if (isActive) {
+          targetOpacity = 1;
+        } else if (i < activeNodeIndex) {
+          targetOpacity = 0.3; // Past nodes dim
+        } else {
+          targetOpacity = Math.min(0.3, focusTransition * 0.5); // Future nodes appear as we zoom
+        }
+        
+        if (data.node.material) {
+          data.node.material.opacity += (targetOpacity - data.node.material.opacity) * 0.08;
+        }
+        if (data.glow.material) {
+          data.glow.material.opacity = data.node.material.opacity * 0.3;
+        }
+        
+        // Active node scale with 3D pulse
+        const scale = isActive ? (1.5 + Math.sin(time * 3) * 0.15) : (isActive || i < activeNodeIndex ? 1 : 0.8);
+        data.node.scale.setScalar(scale);
+        data.glow.scale.setScalar(scale);
+        
+        // Add 3D twist to node rotation
+        nodeGroup.rotation.y = time * 0.2 * (i + 1);
+        nodeGroup.rotation.x = Math.sin(time * 0.5 + i) * 0.2;
+        nodeGroup.rotation.z = Math.cos(time * 0.4 + i) * 0.15;
+        
+        // Position - move to center when focused
+        if (isActive) {
+          // Lerp toward center (where camera is looking)
+          const centerOffset = (1 - focusTransition) * data.originalPos.x * 0.6;
+          nodeGroup.position.x = data.originalPos.x - centerOffset;
+          nodeGroup.position.z = data.originalPos.z - (1 - focusTransition) * data.originalPos.z * 0.6;
+          // Add twist to position
+          nodeGroup.position.y = Math.sin(time * 0.8) * 0.2;
+        } else {
+          nodeGroup.position.copy(data.originalPos);
+          nodeGroup.position.y = Math.sin(time * 0.5 + i * 0.5) * 0.1;
+        }
+        
+        // Inner particles with 3D orbit
+        nodeGroup.children.forEach((child, j) => {
+          if (j >= 2 && child.userData && child.userData.radius) {
+            const d = child.userData;
+            // 3D orbiting
+            child.position.x = Math.cos(d.angle + time * d.speed) * d.radius;
+            child.position.y = Math.sin(d.angle * 2 + time * d.speed * 0.7) * 0.15;
+            child.position.z = Math.sin(d.angle + time * d.speed) * d.radius;
+            if (child.material && data.node.material) {
+              child.material.opacity = data.node.material.opacity * 0.5;
+            }
+          }
+        });
+      });
+
+      // === BEAM ANIMATION (during transition) ===
+      // Show beam during zoom transition
+      const beamOpacity = focusTransition > 0 && focusTransition < 1 ? Math.sin(focusTransition * Math.PI) * 0.8 : 0;
+      if (beamMat) beamMat.opacity = beamOpacity;
+      
+      if (activeNode && beam) {
+        const nodePos = activeNode.userData.originalPos;
+        
+        // Beam stretches from agent to node with twist
+        const beamLength = nodePos.length();
+        beam.scale.y = beamLength;
+        
+        // Position with slight twist
+        const twistX = Math.sin(time * 2) * 0.1;
+        const twistY = Math.cos(time * 1.5) * 0.1;
+        beam.position.set(nodePos.x * 0.5 + twistX, twistY, nodePos.z * 0.5);
+        beam.lookAt(nodePos);
+        
+        if (activeNode.userData.color) {
+          beamMat.color = activeNode.userData.color;
+        }
+        
+        // Beam particles flow along path with 3D spiral
+        beamParticles.forEach((p, i) => {
+          const t = (p.userData.t + time * 0.5) % 1;
+          // Add spiral to flow
+          const spiral = Math.sin(t * Math.PI * 4 + time * 3) * 0.1;
+          p.position.x = nodePos.x * t + spiral;
+          p.position.y = Math.sin(t * Math.PI * 2 + time * 2) * 0.15;
+          p.position.z = nodePos.z * t + spiral;
+          if (p.material) {
+            p.material.opacity = beamOpacity * (0.5 + Math.sin(t * Math.PI) * 0.5);
+          }
+          if (p.material && activeNode.userData.color) {
+            p.material.color = activeNode.userData.color;
+          }
+        });
+      }
+
+      // === COLOR SHIFT ===
+      const sectionColors = [colors.primary, colors.teal, colors.amber, colors.green, colors.pink, colors.purple];
+      const colorIdx = Math.min(Math.floor(sectionProgress), sectionColors.length - 1);
+      const targetColor = sectionColors[colorIdx];
+      
+      // Core color changes
+      if (coreMat) coreMat.color.lerp(targetColor, 0.05);
+      agentGroup.children.forEach((child, i) => {
+        if (child.material && i > 0 && i <= 5) child.material.color.lerp(targetColor, 0.05);
+      });
+
+      // Background with 3D rotation
+      if (bgParticles) {
+        bgParticles.rotation.y = time * 0.008;
+        bgParticles.rotation.x = Math.sin(time * 0.004) * 0.2;
+        bgParticles.rotation.z = Math.cos(time * 0.006) * 0.1;
+        if (bgParticles.material) {
+          bgParticles.material.opacity = 0.25 + (1 - focusTransition) * 0.2;
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // ============================================
+    // SCROLL HANDLING
+    // ============================================
+    
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+      
+      targetScrollProgress = Math.min(scrollTop / docHeight, 1);
+    });
+
+    // ============================================
+    // SCROLL REVEAL
+    // ============================================
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ============================================
+    // SMOOTH SCROLL
+    // ============================================
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

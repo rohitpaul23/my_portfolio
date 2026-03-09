@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rohit Paul — AI/ML Engineer</title>
+  <script src="js/three.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+  <div id="progress-bar"></div>
+  <canvas id="neural-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">Rohit Paul</div>
+    <ul class="nav-links">
+      <li><a href="#experience">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Hire Me →</a>
+  </nav>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <div>
+          <div class="hero-kicker r"><span></span>AI / ML Engineer · Computer Vision · Generative AI</div>
+          <h1 class="hero-h1 r d1">Rohit<br><em>Paul.</em></h1>
+          <p class="hero-desc r d2">I build production-grade AI systems — real-time lip-sync pipelines, diffusion
+            models, and distributed training infrastructure. Currently shipping at <strong>Alethia AI</strong>.</p>
+          <div class="hero-btns r d3">
+            <a href="#experience" class="btn btn-fill">View My Work</a>
+            <a href="#contact" class="btn btn-outline">Get in Touch</a>
+          </div>
+        </div>
+        <div class="hero-photo-wrap r d2">
+          <div class="hero-photo">
+            <img src="assets/Rohit-Paul.jpg" alt="Rohit Paul"
+              onerror="this.style.display='none';this.parentNode.innerHTML+='<div class=hero-photo-fallback>RP</div>'">
+          </div>
+          <div class="avail-badge">
+            <div class="avail-dot"></div>
+            <div class="avail-text"><strong>Open to Roles</strong>AI/ML · CV · GenAI</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signature achievement -->
+      <div class="r d4">
+        <div class="latency-card">
+          <div>
+            <div class="lat-from">10s</div>
+            <div class="lat-lbl">First-frame latency — before</div>
+          </div>
+          <div class="lat-arrow">→</div>
+          <div>
+            <div class="lat-to">&lt;1s</div>
+            <div class="lat-lbl">After optimisation</div>
+          </div>
+          <div>
+            <div class="lat-x">10×</div>
+            <div class="lat-lbl">Speed-up</div>
+          </div>
+          <div class="lat-tech">TensorRT · Kalman Smoothing<br>Progressive Batching · Flow-Matching<br>Pre-silent
+            Padding · Warmup Scripts</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint"><span>SCROLL</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="stat-bar">
+    <div class="stat-track">
+      <div class="stat-item">
+        <div class="stat-val hi">&lt;1s</div>
+        <div class="stat-lbl"><strong>First-frame latency</strong>MoDA lip-sync pipeline</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">4+</div>
+        <div class="stat-lbl"><strong>Years</strong>AI/ML experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">IEEE</div>
+        <div class="stat-lbl"><strong>INDICON 2021</strong>Published research</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val hi">9.03</div>
+        <div class="stat-lbl"><strong>MTech GPA</strong>IIEST Shibpur</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">3</div>
+        <div class="stat-lbl"><strong>Companies</strong>Shipped production AI</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">115</div>
+        <div class="stat-lbl"><strong>HackerRank</strong>Python challenges ✓</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val hi">10×</div>
+        <div class="stat-lbl"><strong>Speed-up</strong>TensorRT optimised</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">&lt;1s</div>
+        <div class="stat-lbl"><strong>First-frame latency</strong>MoDA lip-sync pipeline</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">4+</div>
+        <div class="stat-lbl"><strong>Years</strong>AI/ML experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">IEEE</div>
+        <div class="stat-lbl"><strong>INDICON 2021</strong>Published research</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val hi">9.03</div>
+        <div class="stat-lbl"><strong>MTech GPA</strong>IIEST Shibpur</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">3</div>
+        <div class="stat-lbl"><strong>Companies</strong>Shipped production AI</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">115</div>
+        <div class="stat-lbl"><strong>HackerRank</strong>Python challenges ✓</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val hi">10×</div>
+        <div class="stat-lbl"><strong>Speed-up</strong>TensorRT optimised</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ EXPERIENCE ═══════════ -->
+  <section id="experience" style="padding:120px 0">
+    <div class="wrap">
+      <div class="sec-label r" data-n="01 —">Experience</div>
+      <h2 class="sec-h2 r d1">Where I've<br>Made an Impact</h2>
+      <p class="sec-sub r d2">From published research to production AI — building systems that actually ship.</p>
+    </div>
+
+    <div class="exp-list">
+      <div class="exp-row r">
+        <div class="exp-left" style="padding-right:32px">
+          <div class="exp-period">Feb 2020 — May 2021</div>
+          <div class="exp-co"
+            style="background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.25);font-family:var(--ff-mono);font-size:.7rem;font-weight:600;padding:6px 12px;border-radius:5px;display:inline-block;letter-spacing:.06em">
+            MTech Thesis</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-role">VarDenGrid — Variable Density Clustering</div>
+          <div class="exp-tagline">Published research · IEEE INDICON 2021 · IIEST Shibpur</div>
+          <ul class="exp-bullets">
+            <li>Designed a novel clustering algorithm with <strong>grid-based initialisation</strong> that handles
+              variable-density clusters — overcoming DBSCAN's single-epsilon limitation</li>
+            <li>Requires <strong>zero user input</strong>; parameter estimation is fully automatic across datasets</li>
+            <li>Benchmarked against DBSCAN and OPTICS — comparable performance on standard benchmarks</li>
+            <li>Accepted and published at <strong>IEEE INDICON 2021</strong> — International Conference of the IEEE
+              India Council</li>
+          </ul>
+          <div class="chip-row">
+            <span class="chip">Clustering</span><span class="chip">Python</span>
+            <span class="chip">Scikit-learn</span><span class="chip">IEEE Published</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row r">
+        <div class="exp-left" style="padding-right:32px">
+          <div class="exp-period">Oct 2024 — Present</div>
+          <div class="exp-co co-teal">Alethia AI</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-role">AI/ML Computer Vision Engineer</div>
+          <div class="exp-tagline">Real-time lip-sync · emotive avatars · generative pipelines</div>
+          <ul class="exp-bullets">
+            <li>Optimised real-time lip-sync pipeline (MoDA) — reduced first-frame latency <strong>from 10s to under
+                1s</strong> via TensorRT, Kalman smoothing, and progressive batching</li>
+            <li>Resolved visual artifacts (flickering, wandering eyes, pursed lips) with automated mouth-opening
+              correction for diverse faces</li>
+            <li>Built <strong>emotive lip-sync</strong> with emotion-conditional CFG, intra-emotion interpolation, and
+              Cartesia SSML audio</li>
+            <li>Trained JoyVASA+LivePortrait on MEAD/HDTF; designed fault-tolerant distributed training (DDP, Ray Tune,
+              S3 auto-upload) on VastAI/IONet</li>
+            <li>Deployed Gemini+Flux image generation APIs with multi-key quota rotation and SQS health checks on
+              GCP/Azure; Flux pipeline on RunPod</li>
+            <li>Benchmarked LatentSync, HunyuanVideo-Avatar, Multi-Talk, WanS2V, FramePack with cost-per-second analysis
+            </li>
+            <li>Systematically benchmarked SOTA image/video generation models with advanced prompt templating and fault
+              tolerance to automatically recover from erroneous user prompts</li>
+            <li>Automated a meme generation pipeline integrating image generation models with Google OCR to autonomously
+              detect and correct distorted text</li>
+            <li>Developed a comprehensive web UI scraper for curating high-quality lip-sync data from YouTube playlists,
+              utilizing automatic cropping and VLM/LLM filtration for strict mouth visibility and single-character
+              criteria</li>
+          </ul>
+          <div class="chip-row">
+            <span class="chip">MoDA</span><span class="chip">TensorRT</span><span class="chip">DDP</span>
+            <span class="chip">Ray Tune</span><span class="chip">Flux</span><span class="chip">GCP · Azure</span>
+            <span class="chip">RunPod</span><span class="chip">Prompt Eng</span><span class="chip">OCR</span><span
+              class="chip">Data Scraping</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row r">
+        <div class="exp-left" style="padding-right:32px">
+          <div class="exp-period">Jun 2023 — Oct 2024</div>
+          <div class="exp-co co-indigo">DressMe AI</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-role">AI/ML Engineer — Generative AI & CV</div>
+          <div class="exp-tagline">Virtual try-on · diffusion models · distributed training</div>
+          <ul class="exp-bullets">
+            <li>Developed and deployed diffusion-based virtual try-on models; fine-tuned PHNet image harmonisation model
+            </li>
+            <li>Built multi-GPU distributed training pipelines for large-scale dataset preparation and model training
+            </li>
+            <li>Implemented image relighting via Three.js virtual light source</li>
+            <li>Fine-tuned PHNet image harmonization model by leveraging custom datasets generated via Three.js data
+              augmentation</li>
+          </ul>
+          <div class="chip-row">
+            <span class="chip">Diffusion Models</span><span class="chip">PHNet</span>
+            <span class="chip">Multi-GPU</span><span class="chip">Three.js</span>
+            <span class="chip">Data Augmentation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row r">
+        <div class="exp-left" style="padding-right:32px">
+          <div class="exp-period">Personal Project</div>
+          <div class="exp-co co-amber">ClawdBot</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-role">AI Engineer — Agentic Systems & Real-Time Video</div>
+          <div class="exp-tagline">Agentic workflows · WebGL lip-sync · video pipelines</div>
+          <ul class="exp-bullets">
+            <li>Built agentic AI workflows using LangChain for automated daily AI news updates with context</li>
+            <li>Developed WebGL-based real-time lip-sync system and video creation pipelines using Remotion</li>
+          </ul>
+          <div class="chip-row">
+            <span class="chip">LangChain</span><span class="chip">WebGL</span>
+            <span class="chip">Remotion</span><span class="chip">Agentic AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SKILLS ═══════════ -->
+  <section id="skills" style="padding:120px 0;background:var(--bg1)">
+    <div class="wrap">
+      <div class="sec-label r" data-n="02 —">Skills</div>
+      <h2 class="sec-h2 r d1">Technical Arsenal</h2>
+      <p class="sec-sub r d2">Tools I use to build, train, optimise, and deploy AI systems at scale.</p>
+      <div class="skills-grid r d3">
+        <div class="sk-cell">
+          <div class="sk-head" style="color:var(--teal)"><span class="sk-ico"
+              style="background:rgba(20,184,166,.1)">🧠</span>ML / AI Frameworks</div>
+          <div class="pills"><span class="pill">PyTorch</span><span class="pill">TensorFlow</span><span
+              class="pill">HuggingFace</span><span class="pill">Diffusers</span><span class="pill">Sklearn</span><span
+              class="pill">LangChain</span><span class="pill">Gradio</span><span class="pill">RAG</span></div>
+        </div>
+        <div class="sk-cell">
+          <div class="sk-head" style="color:#818cf8"><span class="sk-ico"
+              style="background:rgba(99,102,241,.1)">⚡</span>Inference & Optimisation</div>
+          <div class="pills"><span class="pill">TensorRT</span><span class="pill">ONNX</span><span
+              class="pill">fp16</span><span class="pill">DDP</span><span class="pill">Ray Tune</span></div>
+        </div>
+        <div class="sk-cell">
+          <div class="sk-head" style="color:var(--amber)"><span class="sk-ico"
+              style="background:rgba(245,158,11,.1)">👁</span>Vision & Media</div>
+          <div class="pills"><span class="pill">OpenCV</span><span class="pill">FFmpeg</span><span
+              class="pill">WebGL</span><span class="pill">Three.js</span><span class="pill">ComfyUI</span></div>
+        </div>
+        <div class="sk-cell">
+          <div class="sk-head" style="color:#c084fc"><span class="sk-ico"
+              style="background:rgba(192,132,252,.1)">☁️</span>Cloud & Deployment</div>
+          <div class="pills"><span class="pill">AWS S3/SQS/EC2</span><span class="pill">GCP</span><span
+              class="pill">Azure</span><span class="pill">RunPod</span><span class="pill">VastAI</span><span
+              class="pill">Replicate</span><span class="pill">fal.ai</span><span class="pill">Docker</span></div>
+        </div>
+        <div class="sk-cell">
+          <div class="sk-head" style="color:#34d399"><span class="sk-ico"
+              style="background:rgba(52,211,153,.1)">💻</span>Languages</div>
+          <div class="pills"><span class="pill">Python</span><span class="pill">C++</span><span
+              class="pill">JavaScript</span><span class="pill">Java</span><span class="pill">SQL</span></div>
+        </div>
+        <div class="sk-cell">
+          <div class="sk-head" style="color:#f472b6"><span class="sk-ico"
+              style="background:rgba(244,114,182,.1)">🛠</span>Dev Tools</div>
+          <div class="pills"><span class="pill">Git</span><span class="pill">Linux</span><span
+              class="pill">FastAPI</span><span class="pill">Flask</span><span class="pill">VSCode</span><span
+              class="pill">Cursor</span><span class="pill">ClawdBot</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PROJECTS ═══════════ -->
+  <section id="research" style="padding:120px 0">
+    <div class="wrap">
+      <div class="sec-label r" data-n="03 —">Projects</div>
+      <h2 class="sec-h2 r d1">Everything I've<br>Built & Shipped</h2>
+      <p class="sec-sub r d2">22 projects across Alethia AI, DressMe AI, and personal work. Click any card to see
+        details.</p>
+
+      <div class="proj-filters r d2">
+        <button class="pf-btn pf-active" data-filter="all">All</button>
+        <button class="pf-btn" data-filter="alethia">Alethia AI</button>
+        <button class="pf-btn" data-filter="dressme">DressMe AI</button>
+        <button class="pf-btn" data-filter="personal">Personal</button>
+        <button class="pf-btn" data-filter="independent">Independent</button>
+      </div>
+
+      <div class="proj-grid r d3" id="proj-grid">
+        <div class="pcard" data-company="alethia" data-id="1">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">⚡</span></div>
+          <div class="pcard-title">MoDA Real-Time Lip-Sync Pipeline</div>
+          <div class="pcard-desc">Reduced first-frame latency from 10s to &lt;1s via TensorRT, Kalman smoothing, and
+            progressive batching.</div>
+          <div class="pcard-foot"><span class="pcard-period">Aug–Oct 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="2">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">😊</span>
+          </div>
+          <div class="pcard-title">Emotive Lip-Sync System</div>
+          <div class="pcard-desc">Emotion-conditional CFG, intra-emotion interpolation, emotion transfer, and Cartesia
+            SSML audio integration.</div>
+          <div class="pcard-foot"><span class="pcard-period">Sep–Nov 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="3">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🔧</span>
+          </div>
+          <div class="pcard-title">Lip-Sync Artifact Resolution</div>
+          <div class="pcard-desc">Systematic fixes: mumbling, flickering, wandering eyes, pursed lips — including an
+            automated mathematical mouth-opening solution.</div>
+          <div class="pcard-foot"><span class="pcard-period">Oct–Dec 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="4">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🤖</span>
+          </div>
+          <div class="pcard-title">JoyVASA + LivePortrait Training</div>
+          <div class="pcard-desc">Merged JoyVASA and LivePortrait. Manual controls for head rotation, eye gaze, mouth
+            shapes. 6D rotation + Full UpsampleConformerEncoder.</div>
+          <div class="pcard-foot"><span class="pcard-period">Jan–Jul 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="5">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🏗</span>
+          </div>
+          <div class="pcard-title">Distributed Training Infrastructure</div>
+          <div class="pcard-desc">Fault-tolerant training across VastAI and IONet. Ray Tune + DDP + TensorBoard. S3
+            auto-upload with resume-from-checkpoint.</div>
+          <div class="pcard-foot"><span class="pcard-period">Jun–Jul 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="6">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🗂</span>
+          </div>
+          <div class="pcard-title">Dataset Preparation Pipeline</div>
+          <div class="pcard-desc">Web app: input YouTube playlists → scrapes and clips them into training data. CV +
+            VLM/LLM filtration. 20 hours of clean video produced.</div>
+          <div class="pcard-foot"><span class="pcard-period">Jul–Aug 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="7">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🖼</span>
+          </div>
+          <div class="pcard-title">Image Generation API — Gemini + Flux</div>
+          <div class="pcard-desc">Multi-key Gemini quota rotation with Flux fallback. CPU deployment on GCP/Azure. SQS
+            health checks. Flux avatar pipeline on RunPod.</div>
+          <div class="pcard-foot"><span class="pcard-period">Mar–May 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="8">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">📊</span>
+          </div>
+          <div class="pcard-title">Model Benchmarking & Analysis</div>
+          <div class="pcard-desc">Cost-per-second analysis across LatentSync, HunyuanVideo-Avatar, Multi-Talk, WanS2V,
+            FramePack, and background removal models.</div>
+          <div class="pcard-foot"><span class="pcard-period">Mar–Nov 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="9">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">📡</span>
+          </div>
+          <div class="pcard-title">Streaming Protocol Analysis</div>
+          <div class="pcard-desc">OME with SRT vs WebRTC vs HLS deep-dive. PersonaLive vs LivePortrait evaluation.
+            Established 2026 MoDA scaling plan.</div>
+          <div class="pcard-foot"><span class="pcard-period">Dec 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="10">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🎨</span>
+          </div>
+          <div class="pcard-title">Avatar Style & Image Pipelines</div>
+          <div class="pcard-desc">Fixed Pixar/anime/3D style outputs. Flux inpaint pipeline. Identity-preservation model
+            for professional selfie generation with Seedream.</div>
+          <div class="pcard-foot"><span class="pcard-period">Jan–Feb 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="11">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🎬</span>
+          </div>
+          <div class="pcard-title">Generative Scene & Asset Pipeline</div>
+          <div class="pcard-desc">UNO and Flux Kontext for identity-preserved scenes. LTX-Video pipeline with Gemini
+            filtration. KEEP face upscaling.</div>
+          <div class="pcard-foot"><span class="pcard-period">May 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="12">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🎭</span>
+          </div>
+          <div class="pcard-title">Emotional Facial Expression Gen</div>
+          <div class="pcard-desc">LLM-driven frame-wise expression changes from audio. Smile, sad, angry, woo, wink,
+            blink transitions. fp16 optimised.</div>
+          <div class="pcard-foot"><span class="pcard-period">Mar 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="13">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🖥</span>
+          </div>
+          <div class="pcard-title">Gradio UI for Marketing Team</div>
+          <div class="pcard-desc">Integrated Ditto + LatentSync into an internal tool. Smile dampening, silent lip
+            adjustment. Unblocked daily AINS video production.</div>
+          <div class="pcard-foot"><span class="pcard-period">Mar 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="14">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🧩</span>
+          </div>
+          <div class="pcard-title">SCAIL + 2D Character Generation</div>
+          <div class="pcard-desc">Automated 2D character generation and emotive base video creation using SCAIL.
+            Standardised consistency across states.</div>
+          <div class="pcard-foot"><span class="pcard-period">Dec 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="15">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">📺</span>
+          </div>
+          <div class="pcard-title">Morgan Livestream Preparation</div>
+          <div class="pcard-desc">Prepared base assets with varied hand gestures for a production AI avatar livestream.
+            Live coordination with the CV team.</div>
+          <div class="pcard-foot"><span class="pcard-period">May 2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="23">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">📈</span>
+          </div>
+          <div class="pcard-title">SOTA Model Benchmarking Pipeline</div>
+          <div class="pcard-desc">Benchmarked generative models via advanced prompt templating and fault tolerance to
+            recover from erroneous user prompts.</div>
+          <div class="pcard-foot"><span class="pcard-period">2026</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="24">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">📝</span>
+          </div>
+          <div class="pcard-title">Meme Gen & OCR Correction</div>
+          <div class="pcard-desc">Automated image pipeline integrating text generation and Google OCR to instantly
+            detect and correct distorted meme text layers.</div>
+          <div class="pcard-foot"><span class="pcard-period">2024</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="alethia" data-id="25">
+          <div class="pcard-top"><span class="pctag pct-alethia">Alethia AI</span><span class="pcard-ico">🕷️</span>
+          </div>
+          <div class="pcard-title">YouTube Lip-Sync Data Scraper</div>
+          <div class="pcard-desc">Web UI that autonomously trawls YouTube links, automatically filter, framing and
+            cropping optimal scenes for lip-sync training.</div>
+          <div class="pcard-foot"><span class="pcard-period">2025</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="dressme" data-id="16">
+          <div class="pcard-top"><span class="pctag pct-dressme">DressMe AI</span><span class="pcard-ico">👗</span>
+          </div>
+          <div class="pcard-title">Virtual Try-On Pipeline</div>
+          <div class="pcard-desc">Diffusion-based virtual try-on. Fine-tuned PHNet image harmonisation. Three.js image
+            relighting with a virtual light source.</div>
+          <div class="pcard-foot"><span class="pcard-period">Jun 2023–Oct 2024</span><span class="pcard-arr">→</span>
+          </div>
+        </div>
+        <div class="pcard" data-company="dressme" data-id="26">
+          <div class="pcard-top"><span class="pctag pct-dressme">DressMe AI</span><span class="pcard-ico">🎨</span>
+          </div>
+          <div class="pcard-title">PHNet Harmonization & Relighting</div>
+          <div class="pcard-desc">Boosted PHNet harmonization performance by augmenting custom datasets visually
+            utilizing a robust Three.js lighting engine.</div>
+          <div class="pcard-foot"><span class="pcard-period">Jun 2023–Oct 2024</span><span class="pcard-arr">→</span>
+          </div>
+        </div>
+        <div class="pcard" data-company="dressme" data-id="17">
+          <div class="pcard-top"><span class="pctag pct-dressme">DressMe AI</span><span class="pcard-ico">⚙️</span>
+          </div>
+          <div class="pcard-title">Multi-GPU Distributed Training</div>
+          <div class="pcard-desc">Large-scale multi-GPU distributed training pipelines for dataset preparation and model
+            training for the try-on system.</div>
+          <div class="pcard-foot"><span class="pcard-period">Jun 2023–Oct 2024</span><span class="pcard-arr">→</span>
+          </div>
+        </div>
+        <div class="pcard" data-company="personal" data-id="18">
+          <div class="pcard-top"><span class="pctag pct-personal">Personal Project</span><span
+              class="pcard-ico">📰</span></div>
+          <div class="pcard-title">Agentic AI News Pipeline</div>
+          <div class="pcard-desc">LangChain-based agentic workflow for automated daily AI news updates with context.
+            Integrated with ClawdBot for delivery.</div>
+          <div class="pcard-foot"><span class="pcard-period">Personal Project</span><span class="pcard-arr">→</span>
+          </div>
+        </div>
+        <div class="pcard" data-company="personal" data-id="19">
+          <div class="pcard-top"><span class="pctag pct-personal">Personal Project</span><span
+              class="pcard-ico">🌐</span></div>
+          <div class="pcard-title">WebGL Real-Time Lip-Sync</div>
+          <div class="pcard-desc">Browser-based real-time lip-sync using WebGL. Automated video creation pipeline built
+            with Remotion.</div>
+          <div class="pcard-foot"><span class="pcard-period">Personal Project</span><span class="pcard-arr">→</span>
+          </div>
+        </div>
+        <div class="pcard" data-company="independent" data-id="20">
+          <div class="pcard-top"><span class="pctag pct-independent">Independent</span><span class="pcard-ico">🌍</span>
+          </div>
+          <div class="pcard-title">English–German NMT Model</div>
+          <div class="pcard-desc">Neural machine translation using LSTM encoder-decoder with attention mechanism for
+            English-to-German translation.</div>
+          <div class="pcard-foot"><span class="pcard-period">Academic</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="independent" data-id="21">
+          <div class="pcard-top"><span class="pctag pct-independent">Independent</span><span class="pcard-ico">📈</span>
+          </div>
+          <div class="pcard-title">TMDB Box Office Prediction</div>
+          <div class="pcard-desc">Kaggle competition entry using Random Forests and feature engineering for movie
+            revenue prediction.</div>
+          <div class="pcard-foot"><span class="pcard-period">Kaggle</span><span class="pcard-arr">→</span></div>
+        </div>
+        <div class="pcard" data-company="independent" data-id="22">
+          <div class="pcard-top"><span class="pctag pct-independent">Independent</span><span class="pcard-ico">🎵</span>
+          </div>
+          <div class="pcard-title">Neural Network Music Generation</div>
+          <div class="pcard-desc">Generative RNN trained on MIDI data to produce new musical sequences.
+            Temperature-based sampling for creativity control.</div>
+          <div class="pcard-foot"><span class="pcard-period">Academic</span><span class="pcard-arr">→</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ WRITING / BLOGS ═══════════ -->
+  <section id="blogs" style="padding:120px 0;background:var(--bg1)">
+    <div class="wrap">
+      <div class="sec-label r" data-n="04 —">Writing</div>
+      <h2 class="sec-h2 r d1">Articles & Thoughts</h2>
+      <p class="sec-sub r d2">Technical deep dives, architectural explainers, and thoughts on AI/ML published on Medium.
+      </p>
+
+      <div class="blog-grid r d3">
+        <a href="https://medium.com/@rohitpaul97/enhancing-phnet-how-i-fine-tuned-the-1-image-harmonization-model-to-make-human-skin-look-real-28cde6a07b3d"
+          target="_blank" class="blog-card">
+          <div class="bc-top">
+            <span class="bc-date">Deep Learning</span>
+            <span class="bc-ico">↗</span>
+          </div>
+          <h3 class="bc-title">Enhancing PHNet: How I fine-tuned the #1 Image Harmonization Model to make human skin
+            look real</h3>
+          <p class="bc-desc">A deep dive into adapting the PHNet model to accurately blend human skin tones in
+            generative outputs, avoiding the common plastic look.</p>
+        </a>
+
+        <a href="https://medium.com/@rohitpaul97/the-power-of-why-understanding-the-motivation-behind-ai-a84a232450b2"
+          target="_blank" class="blog-card">
+          <div class="bc-top">
+            <span class="bc-date">AI Philosophy</span>
+            <span class="bc-ico">↗</span>
+          </div>
+          <h3 class="bc-title">The Power of Why: Understanding the Motivation Behind AI</h3>
+          <p class="bc-desc">Exploring the core driving forces of artificial intelligence from an engineering mindset,
+            questioning the fundamental purpose behind building these systems.</p>
+        </a>
+
+        <a href="https://medium.com/@rohitpaul97/unveiling-the-magic-understanding-various-face-detection-algorithms-7eddb78dca4e"
+          target="_blank" class="blog-card">
+          <div class="bc-top">
+            <span class="bc-date">Computer Vision</span>
+            <span class="bc-ico">↗</span>
+          </div>
+          <h3 class="bc-title">Unveiling the Magic: Understanding Various Face Detection Algorithms</h3>
+          <p class="bc-desc">A technical breakdown and comparison of historic and modern face detection algorithms—from
+            Haar Cascades to deep-learning-based MTCNN and YOLO face models.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT MODAL -->
+  <div class="pmodal-backdrop" id="pmodal-backdrop">
+    <div class="pmodal" id="pmodal">
+      <div class="pmodal-accent" id="pmodal-accent"></div>
+      <div class="pmodal-hd">
+        <button class="pmodal-close" id="pmodal-close">✕</button>
+        <div id="pmodal-tag"></div>
+        <h2 class="pmodal-title" id="pmodal-title"></h2>
+        <div class="pmodal-period" id="pmodal-period"></div>
+      </div>
+      <div class="pmodal-bd" id="pmodal-bd"></div>
+    </div>
+  </div>
+
+  <!-- CERT MODAL -->
+  <div class="pmodal-backdrop" id="cmodal-backdrop">
+    <div class="pmodal" id="cmodal">
+      <div class="pmodal-accent" style="background: var(--teal)"></div>
+      <div class="pmodal-hd">
+        <button class="pmodal-close" id="cmodal-close">✕</button>
+        <span class="pctag pct-alethia" style="margin-bottom: 8px; display: inline-block;">Certification</span>
+        <h2 class="pmodal-title" id="cmodal-title"></h2>
+        <div class="pmodal-period" id="cmodal-inst" style="color: var(--text2); margin-top: 4px;"></div>
+      </div>
+      <div class="pmodal-bd" id="cmodal-bd"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ EDUCATION ═══════════ -->
+  <section id="education" style="padding:120px 0;">
+    <div class="wrap">
+      <div class="sec-label r" data-n="05 —">Education</div>
+      <h2 class="sec-h2 r d1">Academic Background</h2>
+      <div class="edu-list r d2">
+        <div class="edu-row">
+          <div class="edu-ico">🏫</div>
+          <div>
+            <div class="edu-degree">Class 10 (Secondary)</div>
+            <div class="edu-inst">Kendriya Vidyalaya ARC Doom Dooma</div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-period">Passed out: 2011</div>
+            <div class="edu-gpa">CGPA 9.2 / 10</div>
+          </div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-ico">🏫</div>
+          <div>
+            <div class="edu-degree">Class 12 (Senior Secondary)</div>
+            <div class="edu-inst">Kendriya Vidyalaya ARC Doom Dooma</div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-period">Passed out: 2013</div>
+            <div class="edu-gpa">Percentage: 80.8%</div>
+          </div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-ico">📚</div>
+          <div>
+            <div class="edu-degree">Bachelor of Technology — Computer Science & Engineering</div>
+            <div class="edu-inst">Tezpur University, Assam</div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-period">Jul 2014 — May 2018</div>
+            <div class="edu-gpa">GPA 7.36 / 10</div>
+          </div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-ico">🎓</div>
+          <div>
+            <div class="edu-degree">Master of Technology — Computer Science & Engineering</div>
+            <div class="edu-inst">IIEST Shibpur (Deemed University), West Bengal</div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-period">Jul 2019 — Aug 2021</div>
+            <div class="edu-gpa">GPA 9.03 / 10</div>
+          </div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-ico">🔬</div>
+          <div>
+            <div class="edu-degree">Doctor of Philosophy — Computer Science & Engineering</div>
+            <div class="edu-inst">Indian Institute of Technology, Delhi</div>
+          </div>
+          <div class="edu-meta">
+            <div class="edu-period">Jan — Mar 2022</div>
+            <div class="edu-gpa" style="color:var(--text3)">Commenced</div>
+          </div>
+        </div>
+
+      </div>
+      <div style="margin-top:52px" class="r d3">
+        <div class="sec-label" data-n="">Certifications</div>
+        <div class="chip-row" style="margin-top:14px;gap:8px" id="cert-list">
+          <!-- Certifications injected via JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ CONTACT ═══════════ -->
+  <section id="contact" style="background:var(--bg1)">
+    <div class="contact-inner" style="max-width: 800px;">
+      <div class="sec-label r" data-n="" style="justify-content:center">Let's Talk</div>
+      <h2 class="contact-h r d1">Let's Build<br><em>Something Real.</em></h2>
+      <p class="contact-sub r d2" style="margin: 0 auto 48px auto;">Open to AI/ML, Computer Vision, and Generative AI
+        roles.</p>
+
+      <form action="https://api.web3forms.com/submit" method="POST" class="contact-form r d3"
+        style="display: flex; flex-direction: column; gap: 20px; text-align: left; background: var(--bg2); padding: 40px; border-radius: 16px; border: 1px solid var(--border);">
+
+        <!-- Replace with your Access Key from Web3Forms -->
+        <input type="hidden" name="access_key" value="b71b12f5-97f3-47d4-97e3-0e2d69c8e769">
+        <!-- Optional: Redirect to a custom success page, or let it output a basic JSON response -->
+        <!-- <input type="hidden" name="redirect" value="https://web3forms.com/success"> -->
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label for="name"
+            style="font-family: var(--ff-mono); font-size: 0.75rem; color: var(--text2); letter-spacing: 0.05em;">Your
+            Name</label>
+          <input type="text" id="name" name="name" required
+            style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 14px 18px; border-radius: 8px; color: var(--text); font-family: var(--ff-body); font-size: 0.95rem; outline: none; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label for="email"
+            style="font-family: var(--ff-mono); font-size: 0.75rem; color: var(--text2); letter-spacing: 0.05em;">Your
+            Email</label>
+          <input type="email" id="email" name="email" required
+            style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 14px 18px; border-radius: 8px; color: var(--text); font-family: var(--ff-body); font-size: 0.95rem; outline: none; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label for="message"
+            style="font-family: var(--ff-mono); font-size: 0.75rem; color: var(--text2); letter-spacing: 0.05em;">Message</label>
+          <textarea id="message" name="message" rows="5" required
+            style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 14px 18px; border-radius: 8px; color: var(--text); font-family: var(--ff-body); font-size: 0.95rem; outline: none; resize: vertical; transition: border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+        <button type="submit" class="btn btn-fill"
+          style="justify-content: center; margin-top: 10px; font-size: 0.8rem; padding: 16px;">Send Message
+          →</button>
+      </form>
+
+      <div class="contact-links r d4" style="margin-top: 48px;">
+        <a href="mailto:rohitpaul97@gmail.com" class="c-link">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M2 7l10 7 10-7" />
+          </svg>
+          rohitpaul97@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/rohit-paul-91038310b/" target="_blank" class="c-link">
+          <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
+            <circle cx="4" cy="4" r="2" />
+          </svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/rohitpaul23" target="_blank" class="c-link">
+          <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.6-4.04-1.6-.55-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          GitHub
+        </a>
+        <a href="assets/Rohit_Paul_Resume.pdf" target="_blank" class="c-link"
+          style="border-color: var(--teal); color: var(--teal);">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download Resume
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- Script previously deleted -->
+
+  <footer>
+    <p>© 2026 Rohit Paul · Guwahati, Assam, India</p>
+    <p>AI/ML Engineer · Computer Vision · Generative AI</p>
+  </footer>
+
+
+  <script src="script.js"></script>
+</body>
+
+</html>
