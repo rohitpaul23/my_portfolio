@@ -1277,33 +1277,35 @@ footer p {
   background: linear-gradient(90deg, #818cf8, transparent)
 }
 
-.pcard[data-company="personal"]::before {
-  background: linear-gradient(90deg, #f59e0b, transparent)
-}
+
 
 .pcard[data-company="independent"]::before {
   background: linear-gradient(90deg, #c084fc, transparent)
 }
 
 .pcard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 48px -12px rgba(0, 0, 0, .6)
+  transform: translateY(-8px) scale(1.02);
+  background: var(--bg1);
+  border-color: var(--border2);
+  box-shadow: 0 24px 64px -16px rgba(0, 0, 0, .8);
+  z-index: 5
 }
 
 .pcard[data-company="alethia"]:hover {
-  border-color: rgba(20, 184, 166, .25)
+  border-color: rgba(20, 184, 166, .4);
+  box-shadow: 0 20px 48px -12px rgba(20, 184, 166, .15)
 }
 
 .pcard[data-company="dressme"]:hover {
-  border-color: rgba(129, 140, 248, .25)
+  border-color: rgba(129, 140, 248, .4);
+  box-shadow: 0 20px 48px -12px rgba(129, 140, 248, .15)
 }
 
-.pcard[data-company="personal"]:hover {
-  border-color: rgba(245, 158, 11, .25)
-}
+
 
 .pcard[data-company="independent"]:hover {
-  border-color: rgba(192, 132, 252, .25)
+  border-color: rgba(192, 132, 252, .4);
+  box-shadow: 0 20px 48px -12px rgba(192, 132, 252, .15)
 }
 
 .pcard.ph {
@@ -1337,11 +1339,7 @@ footer p {
   border: 1px solid rgba(129, 140, 248, .2)
 }
 
-.pct-personal {
-  background: rgba(245, 158, 11, .1);
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, .2)
-}
+
 
 .pct-independent {
   background: rgba(192, 132, 252, .1);
@@ -1397,8 +1395,10 @@ footer p {
 }
 
 .pcard:hover .pcard-arr {
-  background: rgba(255, 255, 255, .1);
-  color: #f4f4f5
+  background: rgba(255, 255, 255, .15);
+  color: #fff;
+  transform: translateX(6px);
+  box-shadow: 0 0 10px rgba(255,255,255,0.1)
 }
 
 /* ── PROJECT MODAL ── */
@@ -1689,6 +1689,24 @@ footer p {
   background: linear-gradient(90deg, var(--teal), transparent);
   opacity: 0;
   transition: opacity 0.3s;
+}
+
+.blog-card.research-card {
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.blog-card.research-card:hover {
+  border-color: #818cf8;
+  box-shadow: 0 12px 32px -12px rgba(99, 102, 241, 0.25);
+}
+
+.blog-card.research-card::before {
+  background: linear-gradient(90deg, #818cf8, transparent);
+  opacity: 1;
+}
+
+.blog-card.research-card .bc-date {
+  color: #818cf8;
 }
 
 .blog-card:hover::before {
